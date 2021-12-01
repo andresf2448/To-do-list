@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
+import './TodoSearch.css'
 
 function TodoSearch() {
   return (
     <div>
-      <input placeholder="Carro"/>
+      <input className="TodoSearch" placeholder="Carro"/>
     </div>
   )
 }
