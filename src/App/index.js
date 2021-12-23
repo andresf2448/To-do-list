@@ -1,26 +1,31 @@
 import React, {useState} from 'react';
 import { AppUI } from './AppUI';
 
-var defaultTodos = [
-  {text: "hacer la tarea1", completed: false},
-  {text: "hacer la tarea2", completed: false},
-  {text: "hacer la tarea3", completed: false},
-];
+function useLocalStorage(itemName, initialValue){
+  const localStorageItem = localStorage.getItem(itemName);
+  let parsedItem;
 
-function App() {
-
-  const localStorageTodos = localStorage.getItem('TODOS_V1');
-  let parsedTodos;
-
-  if(!localStorageTodos){
-    localStorage.setItem('TODOS_V1', JSON.stringify([]));
-    parsedTodos = [];
+  if(!localStorageItem){
+    localStorage.setItem(itemName, JSON.stringify(initialValue));
+    parsedItem = initialValue;
   }else{
-    parsedTodos = JSON.parse(localStorageTodos);
+    parsedItem = JSON.parse(localStorageItem);
   }
 
-  const [todos, setTodos] = useState(parsedTodos)
-  const [searchValue, setsearchValue] = useState("");
+  const [item, setItem] = useState(parsedItem);
+
+  const saveTodos = (newTodos) => {
+    const stringifiedTodos = JSON.stringify(newTodos);
+    localStorage.setItem(itemName, stringifiedTodos);
+    setItem(newTodos);
+  };
+
+  return [item, saveTodos];
+}
+
+function App() {
+  const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
+  const [searchValue, setSearchValue] = useState("");
 
   const completedTodos = todos.filter(todo => !!todo.completed).length;
   const totalTodos = todos.length
@@ -36,12 +41,6 @@ function App() {
 
       return todoText.includes(searchText);
     })
-  }
-
-  const saveTodos = (newTodos) => {
-    const stringifiedTodos = JSON.stringify(newTodos);
-    localStorage.setItem('TODOS_V1', stringifiedTodos);
-    setTodos(newTodos);
   }
 
   const completeTodo = (text) => {
@@ -64,7 +63,7 @@ function App() {
         totalTodos={totalTodos}
         completedTodos={completedTodos}
         searchValue={searchValue}
-        setsearchValue={setsearchValue}
+        setSearchValue={setSearchValue}
         searchedTodos={searchedTodos}
         completeTodo={completeTodo}
         deleteTodo={deleteTodo}
