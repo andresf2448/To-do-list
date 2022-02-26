@@ -6,6 +6,7 @@ import { TodoItem } from "../TodoItem/index.jsx";
 import TodoList from "../TodoList/index.jsx";
 import { TodoSearch } from "../TodoSearch/index.jsx";
 import { TodoContext } from "../TodoContext";
+import { TodoForm } from "../TodoForm/index.js";
 
 function AppUI() {
   const {
@@ -41,7 +42,7 @@ function AppUI() {
 
       {openModal && (
         <Modal>
-          <p>vamos</p>
+          <TodoForm />
         </Modal>
       )}
 

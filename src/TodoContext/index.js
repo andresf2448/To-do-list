@@ -6,7 +6,7 @@ const TodoContext = createContext();
 function TodoProvider(props){
   const {
     item: todos,
-    saveItem: saveTodos,
+    saveTodos,
     loading,
     error,
   } = useLocalStorage("TODOS_V1", []);
@@ -29,6 +29,15 @@ function TodoProvider(props){
     });
   }
 
+  const addTodo = (text) => {
+    const newTodos = [...todos];
+    newTodos.push({
+      completed: false,
+      text: text
+    });
+    saveTodos(newTodos);
+  };
+
   const completeTodo = (text) => {
     const todoIndex = todos.findIndex((todo) => todo.text === text);
     const newTodos = [...todos];
@@ -50,6 +59,7 @@ function TodoProvider(props){
       totalTodos,
       completedTodos,
       searchValue,
+      addTodo,
       setSearchValue,
       searchedTodos,
       completeTodo,
